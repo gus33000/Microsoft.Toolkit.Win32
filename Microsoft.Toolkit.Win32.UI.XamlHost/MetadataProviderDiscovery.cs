@@ -124,8 +124,19 @@ namespace Microsoft.Toolkit.Win32.UI.XamlHost
                 // Not interface, not abstract, not generic, etc.
                 if (typeof(WUX.Markup.IXamlMetadataProvider).IsAssignableFrom(type))
                 {
-                    var provider = (WUX.Markup.IXamlMetadataProvider)Activator.CreateInstance(type);
-                    yield return provider;
+                    WUX.Markup.IXamlMetadataProvider provider = null;
+                    try
+                    {
+                        provider = (WUX.Markup.IXamlMetadataProvider)Activator.CreateInstance(type);
+                    }
+                    catch (MissingMethodException)
+                    {
+                    }
+
+                    if (provider != null)
+                    {
+                        yield return provider;
+                    }
                 }
             }
         }

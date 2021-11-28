@@ -107,7 +107,7 @@ namespace Microsoft.Toolkit.Forms.UI.XamlHost
                 case NativeDefines.WM_KILLFOCUS:
                     // If focus is being set on the UWP XAML island window then we should prevent LostFocus by
                     // handling this message.
-                    if (_xamlIslandWindowHandle == null || _xamlIslandWindowHandle != m.WParam || _xamlSource.HasFocus)
+                    if (_xamlIslandWindowHandle == System.IntPtr.Zero || _xamlIslandWindowHandle != m.WParam || _xamlSource.HasFocus)
                     {
                         base.WndProc(ref m);
                     }
@@ -115,7 +115,7 @@ namespace Microsoft.Toolkit.Forms.UI.XamlHost
                     break;
 
                 case NativeDefines.WM_DPICHANGED_AFTERPARENT:
-                    if (_xamlIslandWindowHandle != null)
+                    if (_xamlIslandWindowHandle != System.IntPtr.Zero)
                     {
                         UpdateDpiScalingFactor();
                         PerformLayout();

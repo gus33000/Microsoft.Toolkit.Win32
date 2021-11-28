@@ -48,7 +48,6 @@
       <Project>{b4911490-d52e-4cf2-bd14-ba487bdf2240}</Project>
       <Name>Microsoft.Toolkit.Forms.UI.XamlHost</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Microsoft.Toolkit.Sample.UWP.App\Microsoft.Toolkit.Sample.UWP.App.csproj" />
     <ProjectReference Include="..\Microsoft.Toolkit.Win32.UI.XamlHost\Microsoft.Toolkit.Win32.UI.XamlHost.Managed.csproj" />
   </ItemGroup>
   <ItemGroup>
