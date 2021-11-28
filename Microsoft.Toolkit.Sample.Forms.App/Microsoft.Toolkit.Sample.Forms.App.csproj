@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{9C49A885-D39B-4CA0-9DEB-204A6EA7D453}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
-    <AssetTargetFallback>uap10.0.18362</AssetTargetFallback>
+    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
+    <AssetTargetFallback>uap10.0.22000</AssetTargetFallback>
     <Platforms>x86;x64</Platforms>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AssemblyTitle>Windows Community Toolkit Controls (Sample Xaml Island Wrapper Controls for .NET Windows Forms)</AssemblyTitle>
@@ -50,6 +50,15 @@
     </ProjectReference>
     <ProjectReference Include="..\Microsoft.Toolkit.Sample.UWP.App\Microsoft.Toolkit.Sample.UWP.App.csproj" />
     <ProjectReference Include="..\Microsoft.Toolkit.Win32.UI.XamlHost\Microsoft.Toolkit.Win32.UI.XamlHost.Managed.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Remove="Microsoft.Windows.SDK.NET.Ref" />
+    <Reference Include="Windows">
+      <HintPath>$(SolutionDir)\nupkgs\Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRT.Runtime">
+      <HintPath>$(SolutionDir)\nupkgs\WinRT.Runtime.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="..\Microsoft.WinRT.Win32.targets" />
 </Project>

@@ -84,8 +84,6 @@ namespace Microsoft.Toolkit.Wpf.UI.Controls
             typeof(WebView),
             new PropertyMetadata(WebViewDefaults.IsScriptNotifyEnabled, PropertyChangedCallback));
 
-        private static readonly bool IsWebPermissionRestricted = !Security.CallerAndAppDomainHaveUnrestrictedWebBrowserPermission();
-
         private static readonly DependencyProperty SourceProperty = DependencyProperty.Register(
             nameof(Source),
             typeof(Uri),
@@ -106,15 +104,6 @@ namespace Microsoft.Toolkit.Wpf.UI.Controls
         static WebView()
         {
 #pragma warning disable 1065
-            if (IsWebPermissionRestricted)
-            {
-                // Could be hosted in non-IE browser (e.g. Firefox) as an Internet-zone XBAP
-                // Could also be a standalone ClickOnce application
-
-                // Either way, we don't currently support this
-                throw new NotSupportedException(DesignerUI.E_WEB_PERMISSION_RESTRICTED);
-            }
-
             // ClickOnce uses AppLaunch.exe to host partial-trust applications
 #pragma warning disable SA1129 // Do not use default value type constructor
             var hostProcessName = Path.GetFileName(UnsafeNativeMethods.GetModuleFileName(new HandleRef()));

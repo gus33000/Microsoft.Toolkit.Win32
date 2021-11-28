@@ -23,7 +23,6 @@ namespace Microsoft.Toolkit.Wpf.UI.Controls
     /// The <see cref="WebViewHost"/> class hosts a <see cref="WebView"/> inside of a WPF tree
     /// </summary>
     /// <remarks>Requires unmanaged code permissions</remarks>
-    [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
     public abstract class WebViewHost : HwndHost
@@ -174,7 +173,6 @@ namespace Microsoft.Toolkit.Wpf.UI.Controls
         /// <param name="modifiers">Modifier keys.</param>
         /// <returns>Always returns <see langword="false" />.</returns>
         [SecurityCritical]
-        [UIPermission(SecurityAction.LinkDemand, Unrestricted = true)]
         protected override bool TranslateAcceleratorCore(ref MSG msg, ModifierKeys modifiers)
         {
             Debug.WriteLine($"HWND: {msg.hwnd}, msg: {msg.message}, wParam: {msg.wParam}, lParam: {msg.lParam}");

@@ -1,0 +1,103 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "Windows/6.1.0-build.46": {
+        "dependencies": {
+          "Microsoft.SourceLink.GitHub": "1.0.0-beta-62925-02",
+          "Microsoft.SourceLink.Vsts.Git": "1.0.0-beta-62925-02",
+          "Microsoft.Windows.CsWinRT": "2.0.0-private.0",
+          "Nerdbank.GitVersioning": "2.1.65",
+          "StyleCop.Analyzers": "1.0.2"
+        },
+        "runtime": {
+          "Windows.dll": {}
+        }
+      },
+      "Microsoft.Build.Tasks.Git/1.0.0-beta-62925-02": {},
+      "Microsoft.SourceLink.Common/1.0.0-beta-62925-02": {},
+      "Microsoft.SourceLink.GitHub/1.0.0-beta-62925-02": {
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "1.0.0-beta-62925-02",
+          "Microsoft.SourceLink.Common": "1.0.0-beta-62925-02"
+        }
+      },
+      "Microsoft.SourceLink.Vsts.Git/1.0.0-beta-62925-02": {
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "1.0.0-beta-62925-02",
+          "Microsoft.SourceLink.Common": "1.0.0-beta-62925-02"
+        }
+      },
+      "Microsoft.Windows.CsWinRT/2.0.0-private.0": {
+        "runtime": {
+          "lib/net5.0/WinRT.Runtime.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
+          }
+        }
+      },
+      "Nerdbank.GitVersioning/2.1.65": {},
+      "StyleCop.Analyzers/1.0.2": {}
+    }
+  },
+  "libraries": {
+    "Windows/6.1.0-build.46": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Build.Tasks.Git/1.0.0-beta-62925-02": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eK9QAKKzul2bEH/2CIfQr46p3/+eW9qL6xz+FaKmro/AoFETHb2n8xIVmY0LfifunSEno3VD4y2t1B0nFcrs5A==",
+      "path": "microsoft.build.tasks.git/1.0.0-beta-62925-02",
+      "hashPath": "microsoft.build.tasks.git.1.0.0-beta-62925-02.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.Common/1.0.0-beta-62925-02": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zGvd14+QmbOaUwN/F+N2D/YWlNQJ3/t8bCIE0WEaaJdrQyG0JmUXAreej9ggQWyYIUQo36QHdPiMgAggxe09aA==",
+      "path": "microsoft.sourcelink.common/1.0.0-beta-62925-02",
+      "hashPath": "microsoft.sourcelink.common.1.0.0-beta-62925-02.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.GitHub/1.0.0-beta-62925-02": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3BSqtm9kT+hwWWeKAaoF0zmyUYOG+dl1uo+4S2aAlIAV70yiaUFkPS0+XtnzdWmDMRrqCB74FbPKwogjaU2VBQ==",
+      "path": "microsoft.sourcelink.github/1.0.0-beta-62925-02",
+      "hashPath": "microsoft.sourcelink.github.1.0.0-beta-62925-02.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.Vsts.Git/1.0.0-beta-62925-02": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7Hc1aq1/akWWubdxfDzDtVPh/YR5lqRGxASdfgjvITwttJR8UFOBeKf2qGVrnOqTtnBY0v+fjB8Ar0UwhxytyQ==",
+      "path": "microsoft.sourcelink.vsts.git/1.0.0-beta-62925-02",
+      "hashPath": "microsoft.sourcelink.vsts.git.1.0.0-beta-62925-02.nupkg.sha512"
+    },
+    "Microsoft.Windows.CsWinRT/2.0.0-private.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NB+ByaJwen01yqNJAc4HPvfxJ2VL8R3SCMODsXVYmYgt2AgZ/Mt/GXsjpzH7oNJqYgiyCrCn63L7YXYUHzpt5Q==",
+      "path": "microsoft.windows.cswinrt/2.0.0-private.0",
+      "hashPath": "microsoft.windows.cswinrt.2.0.0-private.0.nupkg.sha512"
+    },
+    "Nerdbank.GitVersioning/2.1.65": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MamfXwnCi83Frzui/dtbe7rs5x3t9ayuubQFmrHxkXpHNJR6l1rHWnCMTyG8I05mnn2Frle0wnnNq6x20HpTzA==",
+      "path": "nerdbank.gitversioning/2.1.65",
+      "hashPath": "nerdbank.gitversioning.2.1.65.nupkg.sha512"
+    },
+    "StyleCop.Analyzers/1.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3xD87lafnVhsSEtJKk50G7FGutvaXkFz4XrrLrxnk/DhZU42dnCGWUsvKuBv4mTS0XdIgTY88tLhxW/8Vi3Pow==",
+      "path": "stylecop.analyzers/1.0.2",
+      "hashPath": "stylecop.analyzers.1.0.2.nupkg.sha512"
+    }
+  }
+}

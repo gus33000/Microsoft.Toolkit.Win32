@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{45524ED2-8B5A-42E8-97A2-DCA44ECC83AA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
     <Platforms>x86;x64</Platforms>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -11,6 +11,7 @@
     <StartupObject>Microsoft.Toolkit.Sample.Wpf.App.Program</StartupObject>
     <IsPackable>false</IsPackable>
     <UseWpf>true</UseWpf>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -29,9 +30,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Toolkit.Sample.UWP.App\Microsoft.Toolkit.Sample.UWP.App.csproj" Condition="'$(TargetFramework)'=='netcoreapp3.0'">
-      <Private>true</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Microsoft.Toolkit.Wpf.UI.Controls.WebView\Microsoft.Toolkit.Wpf.UI.Controls.WebView.csproj">
       <Private>true</Private>
     </ProjectReference>
@@ -44,13 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Toolkit.Win32.UI.XamlApplication.Package\Microsoft.Toolkit.Win32.UI.XamlApplication.Package.csproj">
-      <PrivateAssets>analyzers</PrivateAssets>
-    </ProjectReference>
     <ProjectReference Include="..\Microsoft.Toolkit.Win32.UI.XamlHost\Microsoft.Toolkit.Win32.UI.XamlHost.Managed.csproj">
       <PrivateAssets>analyzers</PrivateAssets>
     </ProjectReference>
-    <Reference Include="..\$(XamlApp-Platform)\$(Configuration)\Microsoft.Toolkit.Win32.UI.XamlApplication\Microsoft.Toolkit.Win32.UI.XamlHost.winmd" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,6 +62,18 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Remove="Microsoft.Windows.SDK.NET.Ref" />
+    <Reference Include="Windows">
+      <HintPath>$(SolutionDir)\nupkgs\Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Toolkit.Win32.UI.XamlHost.Projection">
+      <HintPath>$(SolutionDir)\nupkgs\Microsoft.Toolkit.Win32.UI.XamlHost.Projection.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRT.Runtime">
+      <HintPath>$(SolutionDir)\nupkgs\WinRT.Runtime.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="..\Microsoft.WinRT.Win32.targets" />
 </Project>

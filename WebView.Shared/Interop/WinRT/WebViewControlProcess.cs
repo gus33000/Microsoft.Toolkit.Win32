@@ -111,7 +111,6 @@ namespace Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT
             long hostWindowHandle,
             Rect bounds)
         {
-            Security.DemandUnmanagedCode();
             if (hostWindowHandle == 0)
             {
                 throw new ArgumentNullException(nameof(hostWindowHandle));

@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AssemblyTitle>Windows Community Toolkit Controls (Sample WebView for .NET Forms)</AssemblyTitle>
     <Description>Sample Code for Windows Community Toolkit Controls and Windows Forms</Description>
@@ -9,7 +9,7 @@
     <Platforms>x64;x86</Platforms>
     <NoWarn>CS0618;</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows10.0.22000.0'">
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
@@ -20,5 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Toolkit.Forms.UI.Controls.WebView\Microsoft.Toolkit.Forms.UI.Controls.WebView.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Remove="Microsoft.Windows.SDK.NET.Ref" />
+    <Reference Include="Windows">
+      <HintPath>$(SolutionDir)\nupkgs\Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRT.Runtime">
+      <HintPath>$(SolutionDir)\nupkgs\WinRT.Runtime.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

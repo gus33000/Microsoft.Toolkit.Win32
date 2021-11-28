@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
+    <CsWinRTWindowsMetadata>10.0.22000.0+</CsWinRTWindowsMetadata>
+    <AssetTargetFallback>uap10.0.22000</AssetTargetFallback>
+    <CsWinRTFilters>
+      -exclude Windows
+      -include Microsoft.Toolkit.Win32.UI.XamlHost
+    </CsWinRTFilters>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Remove="Microsoft.Windows.SDK.NET.Ref" />
+    <!--<Reference Include="Windows">
+      <HintPath>$(SolutionDir)\nupkgs\Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRT.Runtime">
+      <HintPath>$(SolutionDir)\nupkgs\WinRT.Runtime.dll</HintPath>
+    </Reference>-->
+    <ProjectReference Include="..\Windows\Windows.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.0.0-private.0" />
+    <ProjectReference Include="..\..\Microsoft.Toolkit.Win32.UI.XamlApplication\Microsoft.Toolkit.Win32.UI.XamlApplication.vcxproj">
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <CsWinRTInputs Include="$(SolutionDir)\x64\Debug\Microsoft.Toolkit.Win32.UI.XamlApplication\Microsoft.Toolkit.Win32.UI.XamlHost.winmd" />
+  </ItemGroup>
+
+</Project>

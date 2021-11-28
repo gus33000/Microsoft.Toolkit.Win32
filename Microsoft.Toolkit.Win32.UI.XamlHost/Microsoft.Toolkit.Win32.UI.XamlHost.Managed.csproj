@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
     <RootNamespace>Microsoft.Toolkit.UI.XamlHost</RootNamespace>
     <AssemblyName>Microsoft.Toolkit.Win32.UI.XamlHost.Managed</AssemblyName>
     <Title>Windows Community Toolkit XAMLHost</Title>
@@ -33,7 +33,18 @@
     <ProjectReference Include="..\Microsoft.Toolkit.Win32.UI.XamlApplication.Package\Microsoft.Toolkit.Win32.UI.XamlApplication.Package.csproj">
       <PrivateAssets>analyzers</PrivateAssets>
     </ProjectReference>
-    <Reference Include="..\$(XamlApp-Platform)\$(Configuration)\Microsoft.Toolkit.Win32.UI.XamlApplication\Microsoft.Toolkit.Win32.UI.XamlHost.winmd" />
   </ItemGroup>
 
+  <ItemGroup>
+    <FrameworkReference Remove="Microsoft.Windows.SDK.NET.Ref" />
+    <Reference Include="Windows">
+      <HintPath>$(SolutionDir)\nupkgs\Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Toolkit.Win32.UI.XamlHost.Projection">
+      <HintPath>$(SolutionDir)\nupkgs\Microsoft.Toolkit.Win32.UI.XamlHost.Projection.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRT.Runtime">
+      <HintPath>$(SolutionDir)\nupkgs\WinRT.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

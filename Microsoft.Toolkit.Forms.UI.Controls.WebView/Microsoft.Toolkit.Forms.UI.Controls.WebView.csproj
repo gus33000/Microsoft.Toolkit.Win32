@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
     <RootNamespace>Microsoft.Toolkit.Win32.UI.Controls</RootNamespace>
     <AssemblyName>Microsoft.Toolkit.Forms.UI.Controls.WebView</AssemblyName>
 
@@ -53,6 +53,15 @@
     <Reference Include="WindowsBase" />
     <Reference Include="System.Net.Http">
       <HintPath>$(WINDIR)\Microsoft.NET\Framework\v4.0.30319\System.Net.Http.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Remove="Microsoft.Windows.SDK.NET.Ref" />
+    <Reference Include="Windows">
+      <HintPath>$(SolutionDir)\nupkgs\Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRT.Runtime">
+      <HintPath>$(SolutionDir)\nupkgs\WinRT.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

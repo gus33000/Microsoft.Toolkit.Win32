@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Toolkit.Forms.UI.XamlHost.Interop.Win32;
 using Microsoft.Toolkit.Win32.UI.XamlHost;
+using WinRT;
 using windows = Windows;
 
 namespace Microsoft.Toolkit.Forms.UI.XamlHost
@@ -99,7 +100,7 @@ namespace Microsoft.Toolkit.Forms.UI.XamlHost
         /// <returns>True if <seealso cref="_xamlSource"/> was able to handle the <paramref name="msg"/></returns>
         public override bool PreProcessMessage(ref Message msg)
         {
-            var desktopXamlSourceNative = this._xamlSource.GetInterop<IDesktopWindowXamlSourceNative2>();
+            var desktopXamlSourceNative = this._xamlSource.As<IDesktopWindowXamlSourceNative2>();
             if (desktopXamlSourceNative != null)
             {
                 var result = desktopXamlSourceNative.PreTranslateMessage(ref msg);

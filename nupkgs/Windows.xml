@@ -1,0 +1,394 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Windows</name>
+    </assembly>
+    <members>
+        <member name="T:Windows.Storage.Streams.StreamOperationsImplementation">
+            <summary>Depending on the concrete type of the stream managed by a <c>NetFxToWinRtStreamAdapter</c>,
+            we want the <c>ReadAsync</c> / <c>WriteAsync</c> / <c>FlushAsync</c> / etc. operation to be implemented
+            differently. This is for best performance as we can take advantage of the specifics of particular stream
+            types. For instance, <c>ReadAsync</c> currently has a special implementation for memory streams.
+            Moreover, knowledge about the actual runtime type of the <c>IBuffer</c> can also help choosing the optimal
+            implementation. This type provides static methods that encapsulate the performance logic and can be used
+            by <c>NetFxToWinRtStreamAdapter</c>.</summary>
+        </member>
+        <member name="T:Windows.Storage.Streams.WinRtToNetFxStreamAdapter">
+            <summary>
+            A <code>Stream</code> used to wrap a Windows Runtime stream to expose it as a managed steam.
+            </summary>
+        </member>
+        <member name="M:Windows.Storage.Streams.WinRtToNetFxStreamAdapter.SetWonInitializationRace">
+            <summary>
+            We keep tables for mappings between managed and WinRT streams to make sure to always return the same adapter for a given underlying stream.
+            However, in order to avoid global locks on those tables, several instances of this type may be created and then can race to be entered
+            into the appropriate map table. All except for the winning instances will be thrown away. However, we must ensure that when the losers  are
+            finalized, the do not dispose the underlying stream. To ensure that, we must call this method on the winner to notify it that it is safe to
+            dispose the underlying stream.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.InteropServices.WindowsRuntime.AsyncInfo">
+            <summary><p>Provides factory methods to construct WinRT-compatible representations of asynchronous operations.</p>
+            <p>The factory methods take as inputs functions (delegates) that provide managed Task objects;
+            Different factory methods return different sub-interfaces of <code>Windows.Foundation.IAyncInfo</code>.
+            When an asynchronous operation created by this factory is actually started (by calling <code>Start()</code>),
+            the specified <code>Task</code>-provider delegate will be invoked to create the <code>Task</code> that will
+            be wrapped by the to-WinRT adapter.</p> </summary>
+        </member>
+        <member name="M:System.Runtime.InteropServices.WindowsRuntime.AsyncInfo.Run(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task})">
+            <summary>
+            Creates and starts an <see cref="T:Windows.Foundation.IAsyncAction"/> instance from a function that generates
+            a <see cref="T:System.Threading.Tasks.Task"/>.
+            Use this overload if your task supports cancellation in order to hook-up the <code>Cancel</code>
+            mechanism exposed by the created asynchronous action and the cancellation of your task.</summary>
+            <param name="taskProvider">The function to invoke to create the task when the IAsyncInfo is started.
+            The function is passed a <see cref="T:System.Threading.CancellationToken"/> that the task may monitor
+            to be notified of a cancellation request;
+            you may ignore the <code>CancellationToken</code> if your task does not support cancellation.</param>
+            <returns>An unstarted <see cref="T:Windows.Foundation.IAsyncAction"/> instance. </returns>
+        </member>
+        <member name="M:System.Runtime.InteropServices.WindowsRuntime.AsyncInfo.Run``1(System.Func{System.Threading.CancellationToken,System.IProgress{``0},System.Threading.Tasks.Task})">
+            <summary>
+            Creates and starts an <see cref="T:Windows.Foundation.IAsyncActionWithProgress`1"/> instance from a function
+            that generates a <see cref="T:System.Threading.Tasks.Task"/>.
+            Use this overload if your task supports cancellation and progress monitoring is order to:
+            (1) hook-up the <code>Cancel</code> mechanism of the created asynchronous action and the cancellation of your task,
+            and (2) hook-up the <code>Progress</code> update delegate exposed by the created async action and the progress updates
+            published by your task.</summary>
+            <param name="taskProvider">The function to invoke to create the task when the IAsyncInfo is started.
+            The function is passed a <see cref="T:System.Threading.CancellationToken"/> that the task may monitor
+            to be notified of a cancellation request;
+            you may ignore the <code>CancellationToken</code> if your task does not support cancellation.
+            It is also passed a <see cref="T:System.IProgress`1"/> instance to which progress updates may be published;
+            you may ignore the <code>IProgress</code> if your task does not support progress reporting.</param>
+            <returns>An unstarted <see cref="T:Windows.Foundation.IAsyncActionWithProgress`1"/> instance.</returns>
+        </member>
+        <member name="M:System.Runtime.InteropServices.WindowsRuntime.AsyncInfo.Run``1(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Creates and starts  an <see cref="T:Windows.Foundation.IAsyncOperation`1"/> instance from a function
+            that generates a <see cref="T:System.Threading.Tasks.Task`1"/>.
+            Use this overload if your task supports cancellation in order to hook-up the <code>Cancel</code>
+            mechanism exposed by the created asynchronous operation and the cancellation of your task.</summary>
+            <param name="taskProvider">The function to invoke to create the task when the IAsyncInfo is started.
+            The function is passed a <see cref="T:System.Threading.CancellationToken"/> that the task may monitor
+            to be notified of a cancellation request;
+            you may ignore the <code>CancellationToken</code> if your task does not support cancellation.</param>
+            <returns>An unstarted <see cref="T:Windows.Foundation.IAsyncOperation`1"/> instance.</returns>
+        </member>
+        <member name="M:System.Runtime.InteropServices.WindowsRuntime.AsyncInfo.Run``2(System.Func{System.Threading.CancellationToken,System.IProgress{``1},System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Creates and starts  an <see cref="T:Windows.Foundation.IAsyncOperationWithProgress`2"/> instance
+            from a function that generates a <see cref="T:System.Threading.Tasks.Task`1"/>.<br />
+            Use this overload if your task supports cancellation and progress monitoring is order to:
+            (1) hook-up the <code>Cancel</code> mechanism of the created asynchronous operation and the cancellation of your task,
+            and (2) hook-up the <code>Progress</code> update delegate exposed by the created async operation and the progress
+            updates published by your task.</summary>
+            <typeparam name="TResult">The result type of the task.</typeparam>
+            <typeparam name="TProgress">The type used for progress notifications.</typeparam>
+            <param name="taskProvider">The function to invoke to create the task when the IAsyncOperationWithProgress is started.<br />
+            The function is passed a <see cref="T:System.Threading.CancellationToken"/> that the task may monitor
+            to be notified of a cancellation request;
+            you may ignore the <code>CancellationToken</code> if your task does not support cancellation.
+            It is also passed a <see cref="T:System.IProgress`1"/> instance to which progress updates may be published;
+            you may ignore the <code>IProgress</code> if your task does not support progress reporting.</param>
+            <returns>An unstarted <see cref="T:Windows.Foundation.IAsyncOperationWithProgress`2"/> instance.</returns>
+        </member>
+        <member name="T:System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBuffer">
+            <summary>
+            Contains an implementation of the WinRT IBuffer interface that conforms to all requirements on classes that implement that interface,
+            such as implementing additional interfaces.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions">
+            <summary>
+            Contains extension methods that expose operations on WinRT <code>Windows.Foundation.IBuffer</code>.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.CopyTo(System.Byte[],Windows.Storage.Streams.IBuffer)">
+            <summary>
+            Copies the contents of <code>source</code> to <code>destination</code> starting at offset 0.
+            This method does <em>NOT</em> update <code>destination.Length</code>.
+            </summary>
+            <param name="source">Array to copy data from.</param>
+            <param name="destination">The buffer to copy to.</param>
+        </member>
+        <member name="M:System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.CopyTo(System.Byte[],System.Int32,Windows.Storage.Streams.IBuffer,System.UInt32,System.Int32)">
+            <summary>
+            Copies <code>count</code> bytes from <code>source</code> starting at offset <code>sourceIndex</code>
+            to <code>destination</code> starting at <code>destinationIndex</code>.
+            This method does <em>NOT</em> update <code>destination.Length</code>.
+            </summary>
+            <param name="source">Array to copy data from.</param>
+            <param name="sourceIndex">Position in the array from where to start copying.</param>
+            <param name="destination">The buffer to copy to.</param>
+            <param name="destinationIndex">Position in the buffer to where to start copying.</param>
+            <param name="count">The number of bytes to copy.</param>
+        </member>
+        <member name="M:System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.TryGetUnderlyingData(Windows.Storage.Streams.IBuffer,System.Byte[]@,System.Int32@)">
+            <summary>
+            If the specified <code>IBuffer</code> is backed by a managed array, this method will return <code>true</code> and
+            set <code>underlyingDataArray</code> to refer to that array
+            and <code>underlyingDataArrayStartOffset</code> to the value at which the buffer data begins in that array.
+            If the specified <code>IBuffer</code> is <em>not</em> backed by a managed array, this method will return <code>false</code>.
+            This method is required by managed APIs that wish to use the buffer's data with other managed APIs that use
+            arrays without a need for a memory copy.
+            </summary>
+            <param name="buffer">An <code>IBuffer</code>.</param>
+            <param name="underlyingDataArray">Will be set to the data array backing <code>buffer</code> or to <code>null</code>.</param>
+            <param name="underlyingDataArrayStartOffset">Will be set to the start offset of the buffer data in the backing array
+            or to <code>-1</code>.</param>
+            <returns>Whether the <code>IBuffer</code> is backed by a managed byte array.</returns>
+        </member>
+        <member name="M:System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.IsSameData(Windows.Storage.Streams.IBuffer,Windows.Storage.Streams.IBuffer)">
+            <summary>
+            Checks if the underlying memory backing two <code>IBuffer</code> instances is actually the same memory.
+            When applied to <code>IBuffer</code> instances backed by managed arrays this method is preferable to a naive comparison
+            (such as <code>((IBufferByteAccess) buffer).Buffer == ((IBufferByteAccess) otherBuffer).Buffer</code>) because it avoids
+            pinning the backing array which would be necessary if a direct memory pointer was obtained.
+            </summary>
+            <param name="buffer">An <code>IBuffer</code> instance.</param>
+            <param name="otherBuffer">An <code>IBuffer</code> instance or <code>null</code>.</param>
+            <returns><code>true</code> if the underlying <code>Buffer</code> memory pointer is the same for both specified
+            <code>IBuffer</code> instances (i.e. if they are backed by the same memory); <code>false</code> otherwise.</returns>
+        </member>
+        <member name="M:System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.GetWindowsRuntimeBuffer(System.IO.MemoryStream)">
+            <summary>
+            Creates a new <code>IBuffer</code> instance backed by the same memory as is backing the specified <code>MemoryStream</code>.
+            The <code>MemoryStream</code> may re-sized in future, as a result the stream will be backed by a different memory region.
+            In such case, the buffer created by this method will remain backed by the memory behind the stream at the time the buffer was created.<br />
+            This method can throw an <code>ObjectDisposedException</code> if the specified stream is closed.<br />
+            This method can throw an <code>UnauthorizedAccessException</code> if the specified stream cannot expose its underlying memory buffer.
+            </summary>
+            <param name="underlyingStream">A memory stream to share the data memory with the buffer being created.</param>
+            <returns>A new <code>IBuffer</code> backed by the same memory as this specified stream.</returns>
+        </member>
+        <member name="M:System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.GetWindowsRuntimeBuffer(System.IO.MemoryStream,System.Int32,System.Int32)">
+            <summary>
+            Creates a new <code>IBuffer</code> instance backed by the same memory as is backing the specified <code>MemoryStream</code>.
+            The <code>MemoryStream</code> may re-sized in future, as a result the stream will be backed by a different memory region.
+            In such case buffer created by this method will remain backed by the memory behind the stream at the time the buffer was created.<br />
+            This method can throw an <code>ObjectDisposedException</code> if the specified stream is closed.<br />
+            This method can throw an <code>UnauthorizedAccessException</code> if the specified stream cannot expose its underlying memory buffer.
+            The created buffer begins at position <code>positionInStream</code> in the stream and extends over up to <code>length</code> bytes.
+            If the stream has less than <code>length</code> bytes after the specified starting position, the created buffer covers only as many
+            bytes as available in the stream. In either case, the <code>Length</code> and the <code>Capacity</code> properties of the created
+            buffer are set accordingly: <code>Capacity</code> - number of bytes between <code>positionInStream</code> and the stream capacity end,
+            but not more than <code>length</code>; <code>Length</code> - number of bytes between <code>positionInStream</code> and the stream
+            length end, or zero if <code>positionInStream</code> is beyond stream length end, but not more than <code>length</code>.
+            </summary>
+            <param name="underlyingStream">A memory stream to share the data memory with the buffer being created.</param>
+            <param name="positionInStream">The position of the shared memory region.</param>
+            <param name="length">The maximum size of the shared memory region.</param>
+            <returns>A new <code>IBuffer</code> backed by the same memory as this specified stream.</returns>
+        </member>
+        <member name="T:System.Threading.Tasks.AsyncInfoIdGenerator">
+            <summary>
+            Reusable component to generate unique IDs for ann the different implementations of IAsyncInfo in this assembly.
+            </summary>
+        </member>
+        <member name="F:System.Threading.Tasks.AsyncInfoIdGenerator.InvalidId">
+            <summary>
+            We will never generate this Id, so this value can be used as an invalid, uninitialised or a <em>no-Id</em> value.
+            </summary>
+        </member>
+        <member name="F:System.Threading.Tasks.AsyncInfoIdGenerator.s_idGenerator">
+            <summary>
+            We want to avoid ending up with the same ID as a Windows-implemented async info.
+            At the same time we want to be reproducible. So we use a random generator with a fixed seed.
+            </summary>
+        </member>
+        <member name="M:System.Threading.Tasks.AsyncInfoIdGenerator.CreateNext">
+            <summary>
+            Generate a unique ID that can be used for an IAsyncInfo object.
+            The returned value will never be equal to <code>AsyncInfoIdGenerator.InvalidId</code>.
+            </summary>
+            <returns>A new unique IAsyncInfo Id.</returns>
+        </member>
+        <member name="M:System.Threading.Tasks.AsyncInfoIdGenerator.EnsureInitializedThreadsafe(System.UInt32@)">
+            <summary>
+            Initialises the specified <code>id</code> to a unique Id-value that can be used for an IAsyncInfo object under the
+            assumption that another thread may also attempt to initialise <code>id</code>. The thread that changes <code>id</code>
+            first from <code>AsyncInfoIdGenerator.InvalidId</code> to another value wins and all other threads will respect that
+            choice and leave <code>id</code> unchanged. The method returns the Id that was agreed upon by the race.
+            </summary>
+            <param name="id">The IAsyncInfo ID to initialise.</param>
+            <returns>The unique value to which the specified reference target was initialised.</returns>
+        </member>
+        <member name="T:System.Threading.Tasks.TaskToAsyncInfoAdapter`4">
+            <summary>
+            Implements a wrapper that allows to expose managed <code>System.Threading.Tasks.Task</code> objects as
+            through the WinRT <code>Windows.Foundation.IAsyncInfo</code> interface.
+            </summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskToAsyncInfoAdapter`4._cancelTokenSource">
+            <summary>The token source used to cancel running operations.</summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskToAsyncInfoAdapter`4._id">
+            <summary>The async info's ID. InvalidAsyncId stands for not yet been initialised.</summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskToAsyncInfoAdapter`4._error">
+            <summary>The cached error code used to avoid creating several exception objects if the <code>ErrorCode</code>
+            property is accessed several times. <code>null</code> indicates either no error or that <code>ErrorCode</code>
+            has not yet been called.</summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskToAsyncInfoAdapter`4._state">
+            <summary>The state of the async info. Interlocked operations are used to manipulate this field.</summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskToAsyncInfoAdapter`4._dataContainer">
+            <summary>For IAsyncInfo instances that completed synchronously (at creation time) this field holds the result;
+            for instances backed by an actual Task, this field holds a reference to the task generated by the task generator.
+            Since we always know which of the above is the case, we can always cast this field to TResult in the former case
+            or to one of Task or Task{TResult} in the latter case. This approach allows us to save a field on all IAsyncInfos.
+            Notably, this makes us pay the added cost of boxing for synchronously completing IAsyncInfos where TResult is a
+            value type, however, this is expected to occur rather rare compared to non-synchronously completed user-IAsyncInfos.</summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskToAsyncInfoAdapter`4._completedHandler">
+            <summary>Registered completed handler.</summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskToAsyncInfoAdapter`4._progressHandler">
+            <summary>Registered progress handler.</summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskToAsyncInfoAdapter`4._startingContext">
+            <summary>The synchronization context on which this instance was created/started. Used to callback invocations.</summary>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.#ctor(System.Delegate)">
+            <summary>Creates an IAsyncInfo from the specified delegate. The delegate will be called to construct a task that will
+            represent the future encapsulated by this IAsyncInfo.</summary>
+            <param name="taskProvider">The task generator to use for creating the task.</param>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.#ctor(System.Threading.Tasks.Task,System.Threading.CancellationTokenSource,System.Progress{`3})">
+            <summary>
+            Creates an IAsyncInfo from the Task object. The specified task represents the future encapsulated by this IAsyncInfo.
+            The specified CancellationTokenSource and Progress are assumed to be the source of the specified Task's cancellation and
+            the Progress that receives reports from the specified Task.
+            </summary>
+            <param name="underlyingTask">The Task whose operation is represented by this IAsyncInfo</param>
+            <param name="underlyingCancelTokenSource">The cancellation control for the cancellation token observed
+            by <code>underlyingTask</code>.</param>
+            <param name="underlyingProgressDispatcher">A progress listener/pugblisher that receives progress notifications
+            form <code>underlyingTask</code>.</param>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.#ctor(`2)">
+            <summary>
+            Creates an IAsyncInfo from the specified result value. The IAsyncInfo is created in the Completed state and the
+            specified <code>synchronousResult</code> is used as the result value.
+            </summary>
+            <param name="synchronousResult">The result of this synchronously completed IAsyncInfo.</param>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.DangerousSetCompleted(`2)">
+            <summary> This method sets the result on a *synchronously completed* IAsyncInfo.
+            It does not try to deal with the inherit races: Use it only when constructing a synchronously
+            completed IAsyncInfo in a desired state when you understand the threading conditions well.</summary>
+            <param name="synchronousResult">The new result of this synchronously completed IAsyncInfo (may be <code>default(TResult)</code>)</param>
+            <returns>FALSE if this IAsyncInfo has not actually completed synchronously and this method had no effects, TRUE otherwise.</returns>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.System#IProgress{TProgressInfo}#Report(`3)">
+            <summary>Reports a progress update.</summary>
+            <param name="value">The new progress value to report.</param>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.SetAsyncState(System.Int32,System.Int32,System.Boolean,System.Boolean@)">
+            <summary>
+            Sets the <code>m_state</code> bit field to reflect the specified async state with the corresponding STATE_XXX bit mask.
+            </summary>
+            <param name="newAsyncState">Must be one of the STATE_XXX (not STATEYYY_ZZZ !) constants defined in this class.</param>
+            <param name="conditionBitMask">If <code>useCondition</code> is FALSE: this field is ignored.
+                                           If <code>useCondition</code> is TRUE: Unless this value has at least one bit with <code>m_state</code> in
+                                                                                 common, this method will not perform any action.</param>
+            <param name="useCondition">If TRUE, use <code>conditionBitMask</code> to determine whether the state should be set;
+                                       If FALSE, ignore <code>conditionBitMask</code>.</param>
+            <param name="conditionFailed">If <code>useCondition</code> is FALSE: this field is set to FALSE;
+                                          If <code>useCondition</code> is TRUE: this field indicated whether the specified <code>conditionBitMask</code>
+                                                                                had at least one bit in common with <code>m_state</code> (TRUE)
+                                                                                or not (FALSE).
+                                          (!) Note that the meaning of this parameter to the caller is not quite the same as whether <code>m_state</code>
+                                          is/was set to the specified value, because <code>m_state</code> may already have had the specified value, or it
+                                          may be set and then immediately changed by another thread. The true meaning of this parameter is whether or not
+                                          the specified condition did hold before trying to change the state.</param>
+            <returns>The value at which the current invocation of this method left <code>m_state</code>.</returns>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.SetState(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean@)">
+            <summary>
+            Sets the specified bits in the <code>m_state</code> bit field according to the specified bit-mask parameters.
+            </summary>
+            <param name="newStateSetMask">The bits to turn ON in the <code>m_state</code> bit field</param>
+            <param name="newStateIgnoreMask">Any bits that are OFF in this value will get turned OFF,
+                                             unless they are explicitly switched on by <code>newStateSetMask</code>.</param>
+            <param name="conditionBitMask">If <code>useCondition</code> is FALSE: this field is ignored.
+                                           If <code>useCondition</code> is TRUE: Unless this value has at least one bit with <code>m_state</code> in
+                                                                                 common, this method will not perform any action.</param>
+            <param name="useCondition">If TRUE, use <code>conditionBitMask</code> to determine whether the state should be set;
+                                       If FALSE, ignore <code>conditionBitMask</code>.</param>
+            <param name="conditionFailed">If <code>useCondition</code> is FALSE: this field is set to FALSE;
+                                          If <code>useCondition</code> is TRUE: this field indicated whether the specified <code>conditionBitMask</code>
+                                                                                had at least one bit in common with <code>m_state</code> (TRUE)
+                                                                                or not (FALSE).
+                                          (!) Note that the meaning of this parameter to the caller is not quite the same as whether <code>m_state</code>
+                                          is/was set to the specified value, because <code>m_state</code> may already have had the specified value, or it
+                                          may be set and then immediately changed by another thread. The true meaning of this parameter is whether or not
+                                          the specified condition did hold before trying to change the state.</param>
+            <returns>The value at which the current invocation of this method left <code>m_state</code>.</returns>
+        </member>
+        <member name="P:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.Completed">
+             <summary>
+             Gets or sets the completed handler.
+            
+             We will set the completion handler even when this IAsyncInfo is already started (no other choice).
+             If we the completion handler is set BEFORE this IAsyncInfo completed, then the handler will be called upon completion as normal.
+             If we the completion handler is set AFTER this IAsyncInfo already completed, then this setter will invoke the handler synchronously
+             on the current context.
+             </summary>
+        </member>
+        <member name="P:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.Progress">
+            <summary>Gets or sets the progress handler.</summary>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.Cancel">
+            <summary>Cancels the async info.</summary>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.Close">
+            <summary>Close the async info.</summary>
+        </member>
+        <member name="P:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.ErrorCode">
+            <summary>Gets the error code for the async info.</summary>
+        </member>
+        <member name="P:System.Threading.Tasks.TaskToAsyncInfoAdapter`4.Status">
+            <summary>Gets the status of the async info.</summary>
+        </member>
+        <member name="T:System.VoidReferenceTypeParameter">
+            <summary>This can be used instead of <code>VoidValueTypeParameter</code> when a reference type is required.
+            In case of an actual instantiation (e.g. through <code>default(T)</code>),
+            using <code>VoidValueTypeParameter</code> offers better performance.</summary>
+        </member>
+        <member name="T:System.IO.WindowsRuntimeStorageExtensions">
+            <summary>
+            Contains extension methods that provide convenience helpers for WinRT IO.
+            </summary>
+        </member>
+        <member name="T:System.IO.NetFxToWinRtStreamAdapter">
+            <summary>
+            An <code>wrapper</code> for a managed stream that implements all WinRT stream operations.
+            This class must not implement any WinRT stream interfaces directly.
+            We never create instances of this class directly; instead we use classes defined in
+            the region Interface adapters to implement WinRT ifaces and create instances of those types.
+            See comment in that region for technical details.
+            </summary>
+        </member>
+        <member name="M:System.IO.NetFxToWinRtStreamAdapter.SetWonInitializationRace">
+            <summary>
+            We keep tables for mappings between managed and WinRT streams to make sure to always return the same adapter for a given underlying stream.
+            However, in order to avoid global locks on those tables, several instances of this type may be created and then can race to be entered
+            into the appropriate map table. All except for the winning instances will be thrown away. However, we must ensure that when the losers are
+            finalized, they do not dispose the underlying stream. To ensure that, we must call this method on the winner to notify it that it is safe to
+            dispose the underlying stream.
+            </summary>
+        </member>
+        <member name="M:System.IO.NetFxToWinRtStreamAdapter.System#IDisposable#Dispose">
+            <summary>Implements IDisposable.Dispose (IClosable.Close in WinRT)</summary>
+        </member>
+        <member name="T:System.IO.WindowsRuntimeStreamExtensions">
+            <summary>
+            Contains extension methods for conversion between WinRT streams and managed streams.
+            This class is the public facade for the stream adapters library.
+            </summary>
+        </member>
+    </members>
+</doc>

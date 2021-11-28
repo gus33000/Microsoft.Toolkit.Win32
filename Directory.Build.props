@@ -18,8 +18,8 @@
     <IsWpfProject Condition="'$(IsDesignProject)' != 'true'">$(MSBuildProjectName.Contains('Wpf'))</IsWpfProject>
     <IsFormsProject Condition="'$(IsDesignProject)' != 'true'">$(MSBuildProjectName.Contains('Forms'))</IsFormsProject>
     <IsSampleProject>$(MSBuildProjectName.Contains('Sample'))</IsSampleProject>
-    <DefaultTargetPlatformVersion>18362</DefaultTargetPlatformVersion>
-    <DefaultTargetPlatformMinVersion>18226</DefaultTargetPlatformMinVersion>
+    <DefaultTargetPlatformVersion>22000</DefaultTargetPlatformVersion>
+    <DefaultTargetPlatformMinVersion>22000</DefaultTargetPlatformMinVersion>
     <PackageOutputPath>$(MSBuildThisFileDirectory)bin\nupkg</PackageOutputPath>
   </PropertyGroup>
 
@@ -31,12 +31,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefaultTargetPlatformVersion Condition="'$(DefaultTargetPlatformVersion)'==''">18362</DefaultTargetPlatformVersion>
+    <DefaultTargetPlatformVersion Condition="'$(DefaultTargetPlatformVersion)'==''">22000</DefaultTargetPlatformVersion>
     <AssetTargetFallback Condition="'$(AssetTargetFallback)'==''">uap10.0.$(DefaultTargetPlatformVersion)</AssetTargetFallback>
   </PropertyGroup>
 
   <PropertyGroup>
-    <SignAssembly Condition="'$(SignAssembly)' == '' and '$(IsUwpProject)' != 'true'" >true</SignAssembly>
+    <SignAssembly Condition="'$(SignAssembly)' == '' and '$(IsUwpProject)' != 'true'" >false</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)toolkit.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
@@ -47,9 +47,9 @@
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
         <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">16.0</VisualStudioVersion>
         <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-        <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
-        <!-- XAML Islands require SDK 18226 -->
-        <TargetPlatformMinVersion>10.0.18226.0</TargetPlatformMinVersion>
+        <TargetPlatformVersion>10.0.22000.0</TargetPlatformVersion>
+        <!-- XAML Islands require SDK 22000 -->
+        <TargetPlatformMinVersion>10.0.22000.0</TargetPlatformMinVersion>
 
         <!-- Compiler -->
         <FileAlignment>512</FileAlignment>

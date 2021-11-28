@@ -443,14 +443,6 @@ namespace Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT
                 throw new InvalidOperationException(DesignerUI.E_WEBVIEW_CANNOT_INVOKE_BEFORE_INIT);
             }
 
-            // Protect against the cross domain scripting attacks
-            // If it is our internal navigation to about:blank for navigating to null or load string or before navigation has happened, Source will be null
-            var currentSource = Source;
-            if (currentSource != null)
-            {
-                Security.DemandWebPermission(currentSource);
-            }
-
             return _webViewControl
                     .InvokeScriptAsync(scriptName, arguments)
                     .AsTask();
@@ -492,14 +484,6 @@ namespace Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT
 
                 // TODO: Handle POPUP window
                 // TODO: Handle navigation for frame
-
-                // TODO: Security for partial trust (e.g. about:blank is not allowed)
-                // If we are navigating to "about:blank" internally as a result of setting source to null
-                // or navigating to string, do not demand WebPermission
-                if (!NavigatingToAboutBlank)
-                {
-                    Security.DemandWebPermission(source);
-                }
 
                 // TODO: Sanitize URI containing invalid UTF-8 sequences
                 try
@@ -928,7 +912,7 @@ namespace Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT
                     NavigatingToAboutBlank = false;
                 }
 
-                if (!NavigatingToAboutBlank && !Security.CallerHasWebPermission(url))
+                if (!NavigatingToAboutBlank)
                 {
                     cancelRequested = true;
                 }

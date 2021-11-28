@@ -83,7 +83,7 @@ namespace Microsoft.Toolkit.Sample.Wpf.App
                     app.Run();
                 }
             }
-#if !NET462
+/*#if !NET462
             else if (startupKind == StartupKind.Explict)
             {
                 using (var xamlApp = new Microsoft.Toolkit.Sample.UWP.App.App())
@@ -94,7 +94,7 @@ namespace Microsoft.Toolkit.Sample.Wpf.App
                     app.Run();
                 }
             }
-#endif
+#endif*/
             else
             {
                 var app = new Microsoft.Toolkit.Sample.Wpf.App.App();

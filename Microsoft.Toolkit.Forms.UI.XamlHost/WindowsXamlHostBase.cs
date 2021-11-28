@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Toolkit.Win32.UI.XamlHost;
 using Windows.Foundation.Metadata;
+using WinRT;
 using WUX = Windows.UI.Xaml;
 
 namespace Microsoft.Toolkit.Forms.UI.XamlHost
@@ -253,7 +254,7 @@ namespace Microsoft.Toolkit.Forms.UI.XamlHost
             if (!DesignMode)
             {
                 // Attach window to DesktopWindowXamSource as a render target
-                var desktopWindowXamlSourceNative = _xamlSource.GetInterop<IDesktopWindowXamlSourceNative>();
+                var desktopWindowXamlSourceNative = _xamlSource.As<IDesktopWindowXamlSourceNative>();
                 desktopWindowXamlSourceNative.AttachToWindow(Handle);
                 _xamlIslandWindowHandle = desktopWindowXamlSourceNative.WindowHandle;
 
